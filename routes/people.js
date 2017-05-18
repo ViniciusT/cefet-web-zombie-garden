@@ -65,6 +65,21 @@ router.get('/new/', function(req, res) {
 //   2. Redirecionar para a rota de listagem de pessoas
 //      - Em caso de sucesso do INSERT, colocar uma mensagem feliz
 //      - Em caso de erro do INSERT, colocar mensagem vermelhinha
+router.post('/', function(req, res){
+
+    db.query('INSERT INTO person SET ?', req.body, function(err, result) {
+        if (!err) {
+            req.flash('success', 'O ' + req.body.name + 'foi adicionado, mas quanto tempo sobreviverá sem ser comido?');
+            res.redirect('/people');
+        } else {
+            req.flash('error', 'Não foi possivel  ' + req.body.name);
+
+        }
+
+    });
+
+});
+
 
 
 /* DELETE uma pessoa */
@@ -75,4 +90,16 @@ router.get('/new/', function(req, res) {
 //      - Em caso de sucesso do INSERT, colocar uma mensagem feliz
 //      - Em caso de erro do INSERT, colocar mensagem vermelhinha
 
+router.delete('/:id', function(req, res) {
+    db.query('DELETE FROM person WHERE id = ' + req.params.id, function(err, result) {
+        if (!err) {
+            req.flash('success', 'Você deletou aquele cara chato =]!');
+            res.redirect('/people');
+
+        } else {
+            req.flash('error', 'Não foi dessa vez que você conseguiu deletar =[');
+        }
+
+    });
+});
 module.exports = router;
